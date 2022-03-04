@@ -1,7 +1,6 @@
-name: 'netlify-plugin-{{name}}'
-inputs: []
-# Example inputs:
-#  - name: example
-#    description: Example description
-#    default: 5
-#    required: false
+name: 'netlify-plugin-quarto'
+inputs: 
+  - name: quarto_version
+    description: quarto version to install 
+    default: latest 
+    required: false
