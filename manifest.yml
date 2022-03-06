@@ -1,6 +1,6 @@
 name: 'netlify-plugin-quarto'
 inputs: 
-  - name: quarto_version
+  - name: version
     description: quarto version to install 
     default: latest 
     required: false
