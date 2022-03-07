@@ -13,7 +13,5 @@ package = "."
 
 [build]
 # Dummy build command
-command = "echo onBuild"
+command = "echo 'done'"
 
-[build.environment]
-NODE_VERSION = "12.20.0"
