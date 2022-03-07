@@ -1,7 +1,7 @@
 {
   "name": "netlify-plugin-quarto",
   "version": "0.0.1",
-  "description": "Netlify Build plugin - get quarto ready",
+  "description": "Netlify Build plugin to render via quarto",
   "type": "module",
   "exports": "./src/index.js",
   "main": "./src/index.js",
@@ -17,7 +17,7 @@
     "netlify-plugin",
     "netlify"
   ],
-  "author": "Devin Pastoor <devin.pastoor@rstudio.com>",
+  "author": "Devin Pastoor <devin.pastoor@gmail.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
