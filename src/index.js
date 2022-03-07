@@ -6,7 +6,9 @@ import {
   getAssetByTag,
   downloadReleaseAsset,
 } from './github.js'
-import { mkdir } from 'fs'
+import * as path from 'path'
+import * as os from 'os'
+import { mkdir } from 'fs/promises'
 /* eslint-disable no-unused-vars */
 // The plugin main logic uses `on...` event handlers that are triggered on
 // each new Netlify Build.
@@ -57,7 +59,6 @@ export async function onPreBuild({
     // Utility for running commands.
     // See https://github.com/netlify/build/blob/master/packages/run-utils#readme
     run,
-    runSync,
   },
 }) {
   try {
@@ -65,14 +66,24 @@ export async function onPreBuild({
     // if need bash gotta do it this way
     // https://github.com/sindresorhus/execa#shell ... not recommended
     //await run('curl', ['https://github.com'], {shell: "bash"});
+    const tdir = path.join(os.tmpdir(), 'quarto')
     const asset =
       inputs.version == 'latest'
         ? await getLatestReleaseAsset()
         : await getAssetByTag(inputs.version)
-    await downloadReleaseAsset({ asset_id: asset.asset_id })
-    // TODO: consider breaking these out for more specific build errors?
-    await mkdir('/tmp/quarto', { recursive: true })
-    runSync('dpkg', ['-x', assetPath, '/tmp/quarto'])
+    let quartoDebPath = path.join(os.tmpdir(), `quarto_${asset.tag}.deb`)
+    await mkdir(tdir, { recursive: true })
+    let restored = await cache.restore(quartoDebPath)
+    if (!restored) {
+      console.log('quarto version not detected in cache.... downloading...')
+      await downloadReleaseAsset({
+        asset_id: asset.asset_id,
+        path: quartoDebPath,
+      })
+      // // TODO: consider breaking these out for more specific build errors?
+      await cache.save(quartoDebPath)
+    }
+    await run('dpkg', ['-x', quartoDebPath, tdir])
   } catch (error) {
     // Report a user error
     build.failBuild('Error message', { error })
@@ -131,7 +142,6 @@ export async function onBuild({
     // Utility for running commands.
     // See https://github.com/netlify/build/blob/master/packages/run-utils#readme
     run,
-    runSync,
     // Utility for dealing with modified, created, deleted files since a git commit.
     // See https://github.com/netlify/build/blob/master/packages/git-utils#readme
     git,
@@ -141,7 +151,9 @@ export async function onBuild({
   },
 }) {
   try {
-    runSync('/tmp/quarto/opt/quarto/bin/quarto', ['render'])
+    const tdir = path.join(os.tmpdir(), 'quarto')
+    // quarto will unpack to opt/quarto/bin/quarto
+    await run(path.join(tdir, 'opt/quarto/bin/quarto'), ['--help'])
   } catch (error) {
     build.failBuild('Error message', { error })
   }
