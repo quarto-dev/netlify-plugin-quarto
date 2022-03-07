@@ -62,20 +62,20 @@ export async function onPreBuild({
   },
 }) {
   try {
-    // Commands are printed in Netlify logs
-    // if need bash gotta do it this way
-    // https://github.com/sindresorhus/execa#shell ... not recommended
-    //await run('curl', ['https://github.com'], {shell: "bash"});
     const tdir = path.join(os.tmpdir(), 'quarto')
+    // QUARTO_VERSION can be set up as a build environment variable for no-config
+    // runs, or to override the version in the configuration file. 
+    const quartoVersion = process.env["QUARTO_VERSION"] ? 
+    process.env["QUARTO_VERSION"] : inputs.version
+
     const asset =
-      inputs.version == 'latest'
+      quartoVersion == 'latest'
         ? await getLatestReleaseAsset()
-        : await getAssetByTag(inputs.version)
+        : await getAssetByTag(quartoVersion)
     let quartoDebPath = path.join(os.tmpdir(), `quarto_${asset.tag}.deb`)
     await mkdir(tdir, { recursive: true })
     let restored = await cache.restore(quartoDebPath)
     if (!restored) {
-      console.log('quarto version not detected in cache.... downloading...')
       await downloadReleaseAsset({
         asset_id: asset.asset_id,
         path: quartoDebPath,
