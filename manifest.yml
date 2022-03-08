@@ -4,3 +4,7 @@ inputs:
     description: quarto version to install
     default: latest
     required: false
+  - name: cmd
+    description: quarto command to run 
+    default: "render"
+    required: false

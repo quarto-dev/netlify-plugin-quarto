@@ -153,7 +153,7 @@ export async function onBuild({
   try {
     const tdir = path.join(os.tmpdir(), 'quarto')
     // quarto will unpack to opt/quarto/bin/quarto
-    await run(path.join(tdir, 'opt/quarto/bin/quarto'), ['--help'])
+    await run.command(path.join(tdir, 'opt/quarto/bin/quarto ') + inputs.cmd)
   } catch (error) {
     build.failBuild('Error message', { error })
   }
