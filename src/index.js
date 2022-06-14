@@ -78,15 +78,13 @@ export async function onPreBuild({
     if (!restored) {
       await downloadReleaseAsset({
         asset_id: asset.asset_id,
-        path: quartoDebPath,
+        path: quartoTarPath,
       })
       // // TODO: consider breaking these out for more specific build errors?
       await cache.save(quartoTarPath)
     }
-    quartoPath = path.join(os.tmpdir(), "quarto")
-    await os.mkdir(quartoPath)
     // strip off the root dir of quarto-<version>/
-    await run('tar', ['-xzf', quartoTarPath, quartoPath, "--strip-components", "1"])
+    await run('tar', ['-xzf', quartoTarPath, "-C", tdir, "--strip-components", "1"])
   } catch (error) {
     // Report a user error
     build.failBuild('Error message', { error })
