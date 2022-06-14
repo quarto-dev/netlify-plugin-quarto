@@ -72,18 +72,21 @@ export async function onPreBuild({
       quartoVersion == 'latest'
         ? await getLatestReleaseAsset()
         : await getAssetByTag(quartoVersion)
-    let quartoDebPath = path.join(os.tmpdir(), `quarto_${asset.tag}.deb`)
+    let quartoTarPath = path.join(os.tmpdir(), `quarto_${asset.tag}.tar.gz`)
     await mkdir(tdir, { recursive: true })
-    let restored = await cache.restore(quartoDebPath)
+    let restored = await cache.restore(quartoTarPath)
     if (!restored) {
       await downloadReleaseAsset({
         asset_id: asset.asset_id,
         path: quartoDebPath,
       })
       // // TODO: consider breaking these out for more specific build errors?
-      await cache.save(quartoDebPath)
+      await cache.save(quartoTarPath)
     }
-    await run('dpkg', ['-x', quartoDebPath, tdir])
+    quartoPath = path.join(os.tmpdir(), "quarto")
+    await os.mkdir(quartoPath)
+    // strip off the root dir of quarto-<version>/
+    await run('tar', ['-xzf', quartoTarPath, quartoPath, "--strip-components", "1"])
   } catch (error) {
     // Report a user error
     build.failBuild('Error message', { error })
@@ -153,7 +156,7 @@ export async function onBuild({
   try {
     const tdir = path.join(os.tmpdir(), 'quarto')
     // quarto will unpack to opt/quarto/bin/quarto
-    await run.command(path.join(tdir, 'opt/quarto/bin/quarto ') + inputs.cmd)
+    await run.command(path.join(tdir, 'bin/quarto ') + inputs.cmd)
   } catch (error) {
     build.failBuild('Error message', { error })
   }

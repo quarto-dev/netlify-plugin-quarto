@@ -10,19 +10,26 @@ function findDebAsset(assets) {
   })[0]
 }
 
+function findLinuxTarAsset(assets) {
+  return assets.filter((asset) => {
+    return asset.name.endsWith('amd64.tar.gz')
+  })[0]
+}
+
+
 export async function getLatestReleaseAsset() {
   let latestRelease = await octokit.repos.getLatestRelease({
     owner: 'quarto-dev',
     repo: 'quarto-cli',
   })
-  let debAsset = findDebAsset(latestRelease.data.assets)
+  let asset = findLinuxTarAsset(latestRelease.data.assets)
 
   return {
-    download_url: debAsset.browser_download_url,
+    download_url: asset.browser_download_url,
     html_url: latestRelease.data.html_url,
-    name: debAsset.name,
+    name: asset.name,
     tag: latestRelease.data.tag_name,
-    asset_id: debAsset.id,
+    asset_id: asset.id,
   }
 }
 
@@ -34,20 +41,20 @@ export async function getAssetByTag(tag) {
     repo: 'quarto-cli',
     tag,
   })
-  let debAsset = findDebAsset(release.data.assets)
+  let asset = findLinuxTarAsset(release.data.assets)
 
   return {
-    download_url: debAsset.browser_download_url,
+    download_url: asset.browser_download_url,
     html_url: release.data.html_url,
-    name: debAsset.name,
+    name: asset.name,
     tag: release.data.tag_name,
-    asset_id: debAsset.id,
+    asset_id: asset.id,
   }
 }
 
 export async function downloadReleaseAsset({ asset_id, path }) {
   if (!path) {
-    path = '/tmp/quarto.deb'
+    path = '/tmp/quarto.tar.gz'
   }
   let buf = await octokit.repos.getReleaseAsset({
     headers: {
