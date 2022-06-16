@@ -1,6 +1,6 @@
 {
   "name": "@quarto/netlify-plugin-quarto",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Netlify Build plugin to render via quarto",
   "type": "module",
   "exports": "./src/index.js",
