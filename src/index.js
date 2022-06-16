@@ -153,7 +153,9 @@ export async function onBuild({
 }) {
   try {
     const tdir = path.join(os.tmpdir(), 'quarto')
-    // quarto will unpack to opt/quarto/bin/quarto
+    // quarto will be at /tmp/quarto/bin/quarto
+    // and this will run at the project root for the working directory
+    // inputs.cmd by default is just "render" so will get `/tmp/quarto/bin/quarto render`
     await run.command(path.join(tdir, 'bin/quarto ') + inputs.cmd)
   } catch (error) {
     build.failBuild('Error message', { error })

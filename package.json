@@ -1,6 +1,6 @@
 {
-  "name": "netlify-plugin-quarto",
-  "version": "0.0.4",
+  "name": "@quarto/netlify-plugin-quarto",
+  "version": "0.0.1",
   "description": "Netlify Build plugin to render via quarto",
   "type": "module",
   "exports": "./src/index.js",
@@ -21,7 +21,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/dpastoor/netlify-plugin-quarto"
+    "url": "https://github.com/quarto-dev/netlify-plugin-quarto"
   },
   "directories": {
     "test": "test"
