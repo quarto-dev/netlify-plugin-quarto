@@ -64,8 +64,8 @@ export async function onPreBuild({
   try {
     const tdir = path.join(os.tmpdir(), 'quarto')
     // QUARTO_VERSION can be set up as a build environment variable for no-config
-    // runs, or to override the version in the configuration file. 
-    const quartoVersion = process.env["QUARTO_VERSION"] ? 
+    // runs, or to override the version in the configuration file.
+    const quartoVersion = process.env["QUARTO_VERSION"] ?
     process.env["QUARTO_VERSION"] : inputs.version
 
     const asset =
@@ -153,10 +153,16 @@ export async function onBuild({
 }) {
   try {
     const tdir = path.join(os.tmpdir(), 'quarto')
+
+    // QUARTO_CMD can be set up as a build environment variable for no-config
+    // runs, or to override the version in the configuration file.
+    const cmd = process.env["QUARTO_CMD"] ?
+      process.env["QUARTO_CMD"] : inputs.cmd
+
     // quarto will be at /tmp/quarto/bin/quarto
     // and this will run at the project root for the working directory
     // inputs.cmd by default is just "render" so will get `/tmp/quarto/bin/quarto render`
-    await run.command(path.join(tdir, 'bin/quarto ') + inputs.cmd)
+    await run.command(path.join(tdir, 'bin/quarto ') + cmd)
   } catch (error) {
     build.failBuild('Error message', { error })
   }

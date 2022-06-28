@@ -15,6 +15,9 @@ The Quarto plugin has two optional configuration options: `version` and `cmd`.
 
   You can also specify a particular version, such as `0.9.629`.
 
+  This option is also controlled by the environment variable `QUARTO_VERSION`.
+  If present, this environment variable takes precedence over the input value.
+
 * `cmd`
 
   By default, `cmd` has value `render`, which renders a quarto project in the top-level
@@ -25,6 +28,9 @@ The Quarto plugin has two optional configuration options: `version` and `cmd`.
   repository, use `render PATH-TO-SUBDIRECTORY` as the value.
 
   For full information, see the output of `quarto render help`.
+
+  This option is also controlled by the environment variable `QUARTO_CMD`.
+  If present, this environment variable takes precedence over the input value.
 
 
 
