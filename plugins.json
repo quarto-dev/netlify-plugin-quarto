@@ -1,0 +1,9 @@
+{
+  "author": "Devin Pastoor <devin.pastoor@rstudio.com>",
+  "description": "Build and publish Quarto projects (https://quarto.org)",
+  "name": "Publish Quarto Project",
+  "package": "@quarto/netlify-plugin-quarto",
+
+  "repo": "https://github.com/quarto-dev/netlify-plugin-quarto",
+  "version": "0.0.5"
+}
