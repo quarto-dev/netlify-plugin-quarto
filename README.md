@@ -1,10 +1,31 @@
 Quarto - A Netlify plugin to publish Quarto projects on Netlify
 
-# Install
+## File-based installation
 
-Please install this plugin from the Netlify app.
+You can alternatively also use this plugin by adding the following two files to your project.
 
-# Configuration
+* `package.json`:
+
+  Add the following file to your repository:
+
+  ```json
+  {
+      "dependencies": {
+          "@quarto/netlify-plugin-quarto": "^0.0.5"
+      }
+  }
+  ```
+
+* `netlify.toml`:
+
+  Add the following file to your repository:
+
+  ```toml
+  [[plugins]]
+  package = "@quarto/netlify-plugin-quarto"
+  ```
+
+## Configuration
 
 The Quarto plugin has two optional configuration options: `version` and `cmd`.
 
@@ -34,31 +55,5 @@ The Quarto plugin has two optional configuration options: `version` and `cmd`.
 
 
 
-## File-based installation
 
-You can use the plugin by adding the following two files to your project.
-
-* `package.json`:
-
-  ```json
-  {
-      "dependencies": {
-          "@quarto/netlify-plugin-quarto": "^0.0.5"
-      }
-  }
-  ```
-
-* `netlify.toml`:
-
-  ```toml
-  [[plugins]]
-  package = "@quarto/netlify-plugin-quarto"
-  ```
-
-## UI-based installation
-
-(Currently unavailable, waiting for plugin to be approved for inclusion)
-
-You can install this plugin directly [through the Netlify UI](https://app.netlify.com/plugins/quarto/install):
-https://app.netlify.com/plugins/quarto/install.
 
