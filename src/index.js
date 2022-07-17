@@ -61,6 +61,12 @@ export async function onPreBuild({
     run,
   },
 }) {
+  if (IS_LOCAL) {
+    status.show({
+      summary: 'Running locally, will rely on local quarto install instead'
+    })
+    return
+  }
   try {
     const tdir = path.join(os.tmpdir(), 'quarto')
     // QUARTO_VERSION can be set up as a build environment variable for no-config
@@ -152,8 +158,9 @@ export async function onBuild({
   },
 }) {
   try {
-    const tdir = path.join(os.tmpdir(), 'quarto')
-
+    const tdir = path.join(os.tmpdir(), 'quarto', "bin")
+    const quartoExe = process.platform === 'win32' ? 'quarto.cmd' : 'quarto'
+    const quartoExePath = IS_LOCAL ? quartoExe : path.join(tdir, quartoExe)  
     // QUARTO_CMD can be set up as a build environment variable for no-config
     // runs, or to override the version in the configuration file.
     const cmd = process.env["QUARTO_CMD"] ?
@@ -162,7 +169,7 @@ export async function onBuild({
     // quarto will be at /tmp/quarto/bin/quarto
     // and this will run at the project root for the working directory
     // inputs.cmd by default is just "render" so will get `/tmp/quarto/bin/quarto render`
-    await run.command(path.join(tdir, 'bin/quarto ') + cmd)
+    await run.command(quartoExePath + ' ' + cmd)
   } catch (error) {
     build.failBuild('Error message', { error })
   }
