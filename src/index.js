@@ -94,6 +94,7 @@ export async function onPreBuild({
   console.log('Netlify configuration', netlifyConfig)
   console.log('Plugin configuration', inputs)
   console.log('Build directory', PUBLISH_DIR)
+  console.log('Quarto version', asset)
 
   // Display success information
   status.show({ summary: 'Success!' })
