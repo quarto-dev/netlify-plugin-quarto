@@ -2,7 +2,9 @@ import { Octokit } from '@octokit/rest'
 import { writeFile } from 'fs/promises'
 import { Buffer } from 'buffer'
 
-const octokit = new Octokit()
+const octokit = new Octokit({
+  auth: process.env.GITHUB_TOKEN
+})
 
 function findDebAsset(assets) {
   return assets.filter((asset) => {
